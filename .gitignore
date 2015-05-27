@@ -1,0 +1,3 @@
+.rbenv-gemsets
+Gemfile.lock
+*.gem
