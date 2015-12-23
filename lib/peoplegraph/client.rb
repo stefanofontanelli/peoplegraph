@@ -6,25 +6,52 @@ require 'ostruct'
 require 'peoplegraph'
 
 module PeopleGraph
+  # Client wraps a call to the `/lookup` endpoint.
+  # Supported params:
+  # - email
+  # - url
+  # - name
+  # - company
+  # - webhook_url
+  # - webhook_id
   class Client
     attr_reader :api_key, :connection
 
     def initialize(api_key = ENV['PEOPLEGRAPH_API_KEY'], options = nil)
       @api_key = api_key
-      # /lookup?email=razvan@3desk.com&apiKey=hYxSdRmEif0GN7jwlmeQtVQbE3T1kBb1
       url = ENV['PEOPLEGRAPH_API_URL'] || 'https://api.peoplegraph.io'
       block = block_given? ? Proc.new : nil
       @connection = Faraday.new(url, options, &block)
     end
 
-    def search(email = nil, url = nil, name = nil, company = nil, options = nil)
+    def search(email = nil, url = nil, name = nil, company = nil, options = {})
       profile = lookup(email, url, name, company, options)
       return nil if profile.nil?
       OpenStruct.new(profile)
     end
 
+    def search_by_company(company, options = {})
+      search(nil, nil, nil, company, options)
+    end
+
+    def search_by_email(email, options = {})
+      search(email, nil, nil, nil, options)
+    end
+
+    def search_by_name(name, options = {})
+      search(nil, nil, name, nil, options)
+    end
+
+    def search_by_url(url, options = {})
+      search(nil, url, nil, nil, options)
+    end
+
     protected
-    def lookup(email = nil, url = nil, name = nil, company = nil, options = nil)
+
+    def lookup(email = nil, url = nil, name = nil, company = nil, options = {})
+      webhook_id = options.fetch(:webhook_id, nil)
+      webhook_url = options.fetch(:webhook_url, nil)
+
       response = connection.get do |request|
         request.url '/v2/lookup'
         request.params['apiKey'] = api_key
@@ -32,6 +59,8 @@ module PeopleGraph
         request.params['url'] = url unless url.nil?
         request.params['name'] = name unless name.nil?
         request.params['company'] = company unless company.nil?
+        request.params['webhookId'] = webhook_id unless webhook_id.nil?
+        request.params['webhookUrl'] = webhook_url unless webhook_url.nil?
         request.headers['accept'] = 'application/json'
       end
 
