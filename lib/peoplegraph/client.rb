@@ -6,6 +6,14 @@ require 'ostruct'
 require 'peoplegraph'
 
 module PeopleGraph
+  # Client wraps a call to the `/lookup` endpoint.
+  # Supported params:
+  # - email
+  # - url
+  # - name
+  # - company
+  # - webhook_url
+  # - webhook_id
   class Client
     attr_reader :api_key, :connection
 
