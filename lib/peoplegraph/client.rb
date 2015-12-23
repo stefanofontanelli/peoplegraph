@@ -31,7 +31,10 @@ module PeopleGraph
     end
 
     protected
+
     def lookup(email = nil, url = nil, name = nil, company = nil, options = nil)
+      webhook_id = options.fetch(:webhook_id, nil)
+      webhook_url = options.fetch(:webhook_url, nil)
       response = connection.get do |request|
         request.url '/v2/lookup'
         request.params['apiKey'] = api_key
@@ -39,6 +42,8 @@ module PeopleGraph
         request.params['url'] = url unless url.nil?
         request.params['name'] = name unless name.nil?
         request.params['company'] = company unless company.nil?
+        request.params['webhookId'] = webhook_id unless webhook_id.nil?
+        request.params['webhookUrl'] = webhook_url unless webhook_url.nil?
         request.headers['accept'] = 'application/json'
       end
 
