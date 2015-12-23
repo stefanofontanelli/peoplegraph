@@ -24,7 +24,7 @@ module PeopleGraph
       @connection = Faraday.new(url, options, &block)
     end
 
-    def search(email = nil, url = nil, name = nil, company = nil, options = nil)
+    def search(email = nil, url = nil, name = nil, company = nil, options = {})
       profile = lookup(email, url, name, company, options)
       return nil if profile.nil?
       OpenStruct.new(profile)
@@ -32,7 +32,7 @@ module PeopleGraph
 
     protected
 
-    def lookup(email = nil, url = nil, name = nil, company = nil, options = nil)
+    def lookup(email = nil, url = nil, name = nil, company = nil, options = {})
       webhook_id = options.fetch(:webhook_id, nil)
       webhook_url = options.fetch(:webhook_url, nil)
       response = connection.get do |request|
