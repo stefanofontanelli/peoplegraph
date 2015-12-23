@@ -67,8 +67,10 @@ module PeopleGraph
       status = response.status.to_i
       response = MultiJson.decode(response.body)
 
-      if status == 200 || status == 202
+      if status == 200
         return response['result']
+      elsif status == 202
+        return response
       elsif status == 400
         error = PeopleGraph::Error::BadRequest
       elsif status == 401
