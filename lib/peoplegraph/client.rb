@@ -30,11 +30,28 @@ module PeopleGraph
       OpenStruct.new(profile)
     end
 
+    def search_by_company(company, options = {})
+      search(nil, nil, nil, company, options)
+    end
+
+    def search_by_email(email, options = {})
+      search(email, nil, nil, nil, options)
+    end
+
+    def search_by_name(name, options = {})
+      search(nil, nil, name, nil, options)
+    end
+
+    def search_by_url(url, options = {})
+      search(nil, url, nil, nil, options)
+    end
+
     protected
 
     def lookup(email = nil, url = nil, name = nil, company = nil, options = {})
       webhook_id = options.fetch(:webhook_id, nil)
       webhook_url = options.fetch(:webhook_url, nil)
+
       response = connection.get do |request|
         request.url '/v2/lookup'
         request.params['apiKey'] = api_key
