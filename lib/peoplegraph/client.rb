@@ -19,7 +19,6 @@ module PeopleGraph
 
     def initialize(api_key = ENV['PEOPLEGRAPH_API_KEY'], options = nil)
       @api_key = api_key
-      # /lookup?email=razvan@3desk.com&apiKey=hYxSdRmEif0GN7jwlmeQtVQbE3T1kBb1
       url = ENV['PEOPLEGRAPH_API_URL'] || 'https://api.peoplegraph.io'
       block = block_given? ? Proc.new : nil
       @connection = Faraday.new(url, options, &block)
