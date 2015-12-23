@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 require 'minitest/autorun'
+require 'pry'
 require 'peoplegraph'
 
 class PeopleGraphClientTest < MiniTest::Unit::TestCase
@@ -37,16 +38,16 @@ class PeopleGraphClientTest < MiniTest::Unit::TestCase
 
   def test_result_found
     profile = @client.search('s.fontanelli@gmail.com')
+
     assert profile
     assert profile.name
     assert profile.email
     assert profile.bio
-    assert profile.profiles.to_a.count > 0
-    assert profile.companies.to_a.count > 0
-    assert profile.avatars.to_a.count > 0
-    assert profile.websites.to_a.count > 0
-    assert profile.locations.to_a.count > 0
-    assert profile.positions.to_a.count > 0
+    assert profile.profiles.to_a.size > 0
+    assert profile.companies.to_a.size > 0
+    assert profile.avatars.to_a.size > 0
+    assert profile.websites.to_a.size > 0
+    assert profile.locations.to_a.size > 0
   end
 
   def test_server_error
