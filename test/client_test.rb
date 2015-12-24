@@ -5,6 +5,17 @@ require 'pry'
 require 'peoplegraph'
 
 class PeopleGraphClientTest < MiniTest::Unit::TestCase
+  def random_email
+    mailbox = random_value
+    domain_name = random_value
+    domain_ext = random_value
+    "#{mailbox}@#{domain_name}.#{domain_ext}"
+  end
+
+  def random_value(length = 0)
+    (0...8).map { ('a'..'z').to_a[rand(26)] }.join
+  end
+
   def setup
     ENV['PEOPLEGRAPH_API_KEY'] = 'hYxSdRmEif0GN7jwlmeQtVQbE3T1kBb1'
     @client = PeopleGraph::Client.new
@@ -28,12 +39,13 @@ class PeopleGraphClientTest < MiniTest::Unit::TestCase
   end
 
   def test_request_accepted
-    assert_raises(PeopleGraph::Error::RequestAccepted) do
-      mailbox = (0...8).map { ('a'..'z').to_a[rand(26)] }.join
-      domain_name = (0...8).map { ('a'..'z').to_a[rand(26)] }.join
-      domain_ext = (0...8).map { ('a'..'z').to_a[rand(26)] }.join
-      @client.search("#{mailbox}@#{domain_name}.#{domain_ext}")
-    end
+    wid = random_value
+    wurl = random_value
+
+    response = @client.search_by_email(
+      random_email, webhook_id: wid, webhook_url: wurl)
+
+    assert_equal(202, response['status'])
   end
 
   def test_result_found
