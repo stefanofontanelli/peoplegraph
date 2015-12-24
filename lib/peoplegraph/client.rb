@@ -25,9 +25,10 @@ module PeopleGraph
     end
 
     def search(email = nil, url = nil, name = nil, company = nil, options = {})
-      profile = lookup(email, url, name, company, options)
-      return nil if profile.nil?
-      OpenStruct.new(profile)
+      response = lookup(email, url, name, company, options)
+      return nil if response.nil?
+      return response if webhooked?(response)
+      OpenStruct.new(response['result'])
     end
 
     def search_by_company(company, options = {})
@@ -76,8 +77,11 @@ module PeopleGraph
       response = MultiJson.decode(response.body)
 
       if status == 200
-        return response['result']
+        # No WebHook: your information are under the "result" key.
+        return response
       elsif status == 202
+        # WebHooked: your information will be delivered to your URL.
+        # There is no "result" key.
         return response
       elsif status == 400
         error = PeopleGraph::Error::BadRequest
