@@ -46,6 +46,14 @@ module PeopleGraph
       search(nil, url, nil, nil, options)
     end
 
+    def webhooked?(response)
+      return false unless response.respond_to?(:fetch)
+      return false unless response.respond_to?(:has_key?)
+      return false unless response.key?('status')
+      return false if response.fetch('status', nil) != 202
+      true
+    end
+
     protected
 
     def lookup(email = nil, url = nil, name = nil, company = nil, options = {})
