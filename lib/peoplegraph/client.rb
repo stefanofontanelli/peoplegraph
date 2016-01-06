@@ -159,7 +159,7 @@ module PeopleGraph
       elsif status == 401
         error = PeopleGraph::Error::NotAuthorized
       elsif status == 404
-        return nil
+        error = PeopleGraph::Error::NotFound
       elsif status == 429
         error = PeopleGraph::Error::TooManyRequests
       elsif status == 500
