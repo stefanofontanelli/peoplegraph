@@ -62,6 +62,12 @@ class PeopleGraphClientTest < MiniTest::Unit::TestCase
     assert profile.locations.to_a.size > 0
   end
 
+  def test_not_found
+    assert_raises(PeopleGraph::Error::NotFound) do
+      @client.search('iprobablydonotexists@nomail.nope')
+    end
+  end
+
   def test_server_error
     assert_raises(PeopleGraph::Error::ServerError) do
       @client.search(email: 'mystring')
