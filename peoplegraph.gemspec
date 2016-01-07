@@ -20,7 +20,7 @@ Gem::Specification.new do |spec|
   end
 
   spec.add_dependency 'log4r', '~> 1.1', '>= 1.1.10'
-  spec.add_dependency 'faraday', '~> 0.9.2'
+  spec.add_dependency 'faraday', '~> 0.9.1', '>= 0.9.1'
   spec.add_dependency 'nokogiri', '~> 1.6', '>= 1.6.6.2'
   spec.add_dependency 'multi_json', '>= 1.10.1', '~> 1.10.1'
 
